@@ -12,11 +12,9 @@ jobs:
         working-directory: web
 
     steps:
-      # 1. Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js with pnpm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,18 +22,15 @@ jobs:
           cache: pnpm
           cache-dependency-path: web/pnpm-lock.yaml
 
-      # 3. Enable pnpm via Corepack
-      - name: Enable pnpm
-        run: corepack enable
+      # 🔑 This installs pnpm and puts it in PATH
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
 
-      # (Optional) Pin pnpm version for consistency
-      # - name: Use specific pnpm version
-      #   run: corepack prepare pnpm@9 --activate
-
-      # 4. Install dependencies (strict lockfile)
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5. Build
       - name: Build
         run: pnpm build
