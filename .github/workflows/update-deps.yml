@@ -20,32 +20,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js with Yarn cache
+      # 2. Setup Node.js with pnpm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "yarn"
-          cache-dependency-path: web/yarn.lock
+          cache: "pnpm"
+          cache-dependency-path: web/pnpm-lock.yaml
 
-      # 3. Install npm-check-updates (works with Yarn too)
+      # 3. Enable pnpm via Corepack
+      - name: Enable pnpm
+        run: corepack enable
+
+      # (Optional) Pin pnpm version
+      # - name: Use specific pnpm version
+      #   run: corepack prepare pnpm@9 --activate
+
+      # 4. Install npm-check-updates
       - name: Install npm-check-updates
         run: npm install -g npm-check-updates
 
-      # 4. Update dependencies in package.json
+      # 5. Update dependencies in package.json
       - name: Update package.json dependencies
-        run: ncu -u 
+        run: ncu -u
 
-      # 5. Install updated dependencies (allow lockfile update)
+      # 6. Install updated dependencies & update lockfile
       - name: Install updated dependencies
-        run: yarn install --mode=update-lockfile
+        run: pnpm install
 
-      # 6. Commit & push changes
+      # 7. Commit & push changes
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json yarn.lock
+          git add package.json pnpm-lock.yaml
           if git commit -m "chore: update dependencies"; then
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
           else

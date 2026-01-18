@@ -4,7 +4,7 @@ games {
   "rdr3"
 }
 
-description "React + Mantine Boilerplate"
+description "Fivem Territories System with Gangs and influence"
 author "SYNO"
 version '1.0.0'
 

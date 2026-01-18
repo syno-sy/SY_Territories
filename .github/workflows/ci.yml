@@ -1,34 +1,41 @@
 name: Main CI
+
 on: [push, pull_request]
+
 jobs:
   build:
     name: Build Test
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: web
 
     steps:
+      # 1. Checkout repository
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Setup node environment
-        uses: actions/setup-node@v3
+      # 2. Setup Node.js with pnpm cache
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
 
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: |
-            ~/.cache/yarn
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      # 3. Enable pnpm via Corepack
+      - name: Enable pnpm
+        run: corepack enable
 
+      # (Optional) Pin pnpm version for consistency
+      # - name: Use specific pnpm version
+      #   run: corepack prepare pnpm@9 --activate
+
+      # 4. Install dependencies (strict lockfile)
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
+      # 5. Build
       - name: Build
-        run: yarn build
+        run: pnpm build
