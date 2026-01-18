@@ -19,7 +19,7 @@ debugData(
       action: 'setUiData',
       data: {
         zone: 'East V',
-        gang: 'TVA',
+        gang: 'SRRA',
         gangColor: '255, 0, 0',
         influence: 75,
       },
@@ -27,28 +27,13 @@ debugData(
     {
       action: 'setGangStatus',
       data: [
-        { code: 'defender', gang: 'TVA', value: 10 },
-        { code: 'attacker', gang: 'KVA', value: 8 },
+        { code: 'defender', gang: 'TVA', value: 10, max: 20 },
+        { code: 'attacker', gang: 'KVA', value: 8, max: 20 },
       ],
     },
     {
       action: 'setTimerData',
       data: { minutes: 2, seconds: 59, total: 200 },
-    },
-    {
-      action: 'showCreateWarUi',
-      data: {
-        zones: [
-          { value: 'eastv', label: 'East V' },
-          { value: 'davis', label: 'Davis' },
-        ],
-        gangs: [
-          { value: 'tva', label: 'TVA' },
-          { value: 'kva', label: 'KVA' },
-          { value: 'tga', label: 'TGA' },
-          { value: 'srra', label: 'SRRA' },
-        ],
-      },
     },
   ],
   10
@@ -81,16 +66,8 @@ export default function AppComp() {
   useNuiEvent<TimerData>('setTimerData', setTimerData);
 
   /* ------------------------------------------------------------------ */
-  /* Memoized Timer Progress */
+  /* Timer Hooks */
   /* ------------------------------------------------------------------ */
-
-  // const timerProgress = useMemo(() => {
-  //   if (!timerData) return 0;
-
-  //   const remainingSeconds = timerData.minutes * 60 + (timerData.seconds ?? 0);
-
-  //   return Math.max(0, Math.min((remainingSeconds / timerData.total) * 100, 100));
-  // }, [timerData]);
 
   const timerProgress = useMemo(() => {
     if (!timerData || !timerData.total || timerData.total <= 0) return 0;
@@ -106,17 +83,16 @@ export default function AppComp() {
   const isCritical = (timerData?.minutes ?? 0) < 3;
 
   /* ------------------------------------------------------------------ */
-  /* Render */
+  /* UI Render */
   /* ------------------------------------------------------------------ */
 
   return (
     <>
-      {' '}
       {visible && (
         <div
           ref={ref}
           style={{
-            height: height - 211,
+            height: height - 196,
             width: width - 341,
             position: 'relative',
           }}
@@ -125,7 +101,7 @@ export default function AppComp() {
             className={classes.box}
             p={5}
             m={5}
-            h={200}
+            h={185}
             w={330}
             style={{
               borderRadius: 25,
@@ -135,14 +111,24 @@ export default function AppComp() {
             }}
           >
             <Group justify="space-between">
+              <Text w={100} ta={'center'} c="white" size="lg">
+                {locale.ui_TextInfluence}
+              </Text>
+              <Group justify="right" align="center" mr={10}>
+                <ThemeIcon variant="light" radius="lg">
+                  <Icon icon="bx:shield-quarter" width={24} height={24} />
+                </ThemeIcon>
+
+                <Text c="white" size="lg" mt={5}>
+                  Zone : {uiData?.zone ?? 'N/A'}
+                </Text>
+              </Group>
+            </Group>
+            <Group justify="space-between" p={0}>
               {/* Influence Ring */}
               <Stack gap={0} align="center" justify="space-between">
-                <Text c="white" fw={500} size="md">
-                  {locale.ui_TextInfluence}
-                </Text>
-
                 <RingsProgress
-                  size={110}
+                  size={100}
                   thickness={10}
                   roundCaps
                   rings={[
@@ -152,7 +138,7 @@ export default function AppComp() {
                     },
                   ]}
                   label={
-                    <Text c="white" fw={700} ta="center" size="xl">
+                    <Text c="white" ta="center" size="md">
                       {uiData?.gang ?? 'N/A'}
                       <br />
                       {uiData?.influence ?? 0}%
@@ -162,61 +148,69 @@ export default function AppComp() {
               </Stack>
 
               {/* Zone & Gangs */}
-              <Stack w="60%">
-                <Group justify="right" align="center" mr={10}>
-                  <ThemeIcon variant="light" radius="lg">
-                    <Icon icon="bx:shield-quarter" width={24} height={24} />
-                  </ThemeIcon>
+              <Stack w="60%" gap={2}>
+                {gangStatus?.map((gang, index) => {
+                  const gangPercentage = gang.max > 0 ? (gang.value / gang.max) * 100 : 100;
+                  return (
+                    <Paper
+                      key={index}
+                      className={classes.paper}
+                      py={0}
+                      px={5}
+                      radius="md"
+                      style={{
+                        backgroundColor:
+                          gang.code === 'attacker'
+                            ? 'var(--mantine-color-red-light-hover)'
+                            : 'var(--mantine-color-green-light-hover)',
+                      }}
+                    >
+                      <Group justify="space-between">
+                        <Group gap={8}>
+                          <ActionIcon
+                            size={'20px'}
+                            variant="light"
+                            radius="md"
+                            color={gang.code === 'defender' ? '#2DFE54' : '#FF000C'}
+                          >
+                            <Icon
+                              icon={
+                                gang.code === 'defender' ? 'lucide:shield-check' : 'lucide:skull'
+                              }
+                              width={14}
+                              height={14}
+                            />
+                          </ActionIcon>
 
-                  <Text c="white" fw={600} size="lg" mt={5}>
-                    Zone : {uiData?.zone ?? 'N/A'}
-                  </Text>
-                </Group>
+                          <Text c={gang.code === 'defender' ? '#2DFE54' : '#FF000C'}>
+                            {gang.gang}
+                          </Text>
+                        </Group>
 
-                {gangStatus?.map((gang, index) => (
-                  <Paper key={index} className={classes.paper} p={3} radius="md">
-                    <Group justify="space-between">
-                      <Group gap={8}>
-                        <ActionIcon
-                          variant="light"
-                          radius="md"
+                        <Progress
+                          w="30%"
+                          value={gangPercentage}
                           color={gang.code === 'defender' ? '#2DFE54' : '#FF000C'}
-                        >
-                          <Icon
-                            icon={gang.code === 'defender' ? 'lucide:shield-check' : 'lucide:skull'}
-                            width={16}
-                            height={16}
-                          />
-                        </ActionIcon>
+                          styles={{
+                            root: {
+                              backgroundColor: gang.code === 'defender' ? '#2dfe541f' : '#ff000c1f',
+                            },
+                          }}
+                        />
 
-                        <Text c={gang.code === 'defender' ? '#2DFE54' : '#FF000C'} fw={600}>
-                          {gang.gang}
+                        <Text c="white" size="lg">
+                          {gang.value}
                         </Text>
                       </Group>
-
-                      <Progress
-                        w="30%"
-                        value={Math.min(gang.value * 10, 100)}
-                        color={gang.code === 'defender' ? '#2DFE54' : '#FF000C'}
-                        styles={{
-                          root: {
-                            backgroundColor: gang.code === 'defender' ? '#2dfe541f' : '#ff000c1f',
-                          },
-                        }}
-                      />
-
-                      <Text c="white" fw={600} size="lg">
-                        {gang.value}
-                      </Text>
-                    </Group>
-                  </Paper>
-                ))}
+                    </Paper>
+                  );
+                })}
               </Stack>
             </Group>
 
             {/* Timer */}
             <Stack w="100%" align="center" gap={0}>
-              <Text c="white" fw={400} size="42px" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <Text c="white" size="32px">
                 {timerData?.minutes ?? 0}:{String(timerData?.seconds ?? 0).padStart(2, '0')}
               </Text>
 

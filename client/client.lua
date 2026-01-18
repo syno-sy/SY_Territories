@@ -4,12 +4,29 @@ local lastZone = nil
 local lastInfluence = nil
 local lastGang = nil
 local currentFight = nil
+local lastState = nil
+local TerritoryBlips = {}
+local BlipColorIDs = {
+    ["red"] = 1,
+    ["green"] = 2,
+    ["blue"] = 3,
+    ["white"] = 4,
+    ["yellow"] = 5,
+}
 
 -- =============================
 -- SYNC TERRITORIES FROM SERVER
 -- =============================
 RegisterNetEvent("SY_Territories:sync", function(data)
     Territories = data
+    RefreshTerritoryBlips()
+end)
+
+RegisterNetEvent("SY_Territories:syncOnPlayerGangChange", function()
+    if currentZone then
+        TriggerServerEvent("SY_Territories:enterZone", currentZone)
+        lastGang = nil
+    end
 end)
 
 -- =============================
@@ -35,35 +52,62 @@ for zone, data in pairs(Config.Territories) do
 end
 
 -- =============================
--- HUD LOOP (active only during fight)
+-- HUD LOOP
 -- =============================
 CreateThread(function()
     while true do
         local waitTime = 1000
 
-        if currentZone and Territories[currentZone] and currentFight then
+        if currentZone and Territories[currentZone] then
             local terr = Territories[currentZone]
-            if lastZone ~= currentZone or lastGang ~= terr.gang or lastInfluence ~= terr.influence then
-                local GangColorCode = GetGangColorCode(terr.gang) or "255, 255, 255"
-                ShowUI(true, {
-                    zone = currentZone,
-                    gang = terr.gang,
-                    influence = terr.influence,
-                    gangColor = GangColorCode
-                })
+            local zoneLabel = Config.Territories[currentZone].label
+            local gangLabel = Config.Gangs[terr.gang].label
 
-                lastZone = currentZone
-                lastGang = terr.gang
-                lastInfluence = terr.influence
+
+            if currentFight then
+                HideInfluenceUi()
+
+                if lastZone ~= currentZone or lastGang ~= terr.gang or lastInfluence ~= terr.influence or lastState ~= "war" then
+                    local GangColorCode = GetGangColorCode(terr.gang) or "255, 255, 255"
+                    ShowWarUI(true, {
+                        zone = zoneLabel,
+                        gang = gangLabel,
+                        influence = terr.influence,
+                        gangColor = GangColorCode
+                    })
+
+                    lastZone = currentZone
+                    lastGang = terr.gang
+                    lastInfluence = terr.influence
+                    lastState = "war"
+                end
+                waitTime = 250
+            else
+                ShowWarUI(false, nil)
+
+                if lastZone ~= currentZone or lastGang ~= terr.gang or lastInfluence ~= terr.influence or lastState ~= "influence" then
+                    ShowInfluenceUi({
+                        zone = zoneLabel,
+                        gang = gangLabel,
+                        influence = terr.influence,
+                        gangColor = GetGangColorCode(terr.gang)
+                    })
+
+                    lastZone = currentZone
+                    lastGang = terr.gang
+                    lastInfluence = terr.influence
+                    lastState = "influence"
+                end
+                waitTime = 500
             end
-
-            waitTime = 250 -- update faster during fight
         else
             if lastZone ~= nil then
-                ShowUI(false, nil)
+                ShowWarUI(false, nil)
+                HideInfluenceUi()
                 lastZone = nil
                 lastGang = nil
                 lastInfluence = nil
+                lastState = nil
             end
         end
 
@@ -91,7 +135,7 @@ RegisterNetEvent("SY_Territories:zoneFightUpdate", function(zone, data)
         return
     end
 
-    print(json.encode(data.timer))
+
     currentFight = data
     SendNUIMessage({
         action = 'setTimerData',
@@ -111,19 +155,47 @@ end)
 RegisterNetEvent("SY_Territories:zoneFightEnd", function(zone)
     if currentZone == zone then
         currentFight = nil
-        ShowUI(false, nil)
+        ShowWarUI(false, nil)
     end
 end)
 
+
 -- =============================
--- CREATE WAR KEYBIND
+-- REFRESH BLIPS FUNCTION
 -- =============================
-lib.addKeybind({
-    name = 'Create War',
-    description = 'press J to create a war',
-    defaultKey = 'J',
-    onPressed = function(self)
-        CreateWar()
-        print(('pressed %s (%s)'):format(self.currentKey, self.name))
-    end,
-})
+function RefreshTerritoryBlips()
+    for _, handle in ipairs(TerritoryBlips) do
+        if handle and DoesBlipExist(handle) then
+            RemoveBlip(handle)
+        end
+    end
+
+    TerritoryBlips = {}
+
+    for zoneName, data in pairs(Territories) do
+        local config = Config.Territories[zoneName]
+
+        if config and config.areas then
+            local colorName = Config.Gangs[data.gang] and Config.Gangs[data.gang].color or "red"
+            local gangColorID = BlipColorIDs[colorName] or 1
+            local blipAlpha = math.floor(data.influence)
+
+            for _, area in ipairs(config.areas) do
+                local handle = AddBlipForRadius(
+                    area.coords.x,
+                    area.coords.y,
+                    area.coords.z,
+                    area.radius
+                )
+
+                SetBlipColour(handle, gangColorID)
+                SetBlipAlpha(handle, blipAlpha)
+                SetBlipHighDetail(handle, true)
+
+                if handle ~= 0 then
+                    table.insert(TerritoryBlips, handle)
+                end
+            end
+        end
+    end
+end

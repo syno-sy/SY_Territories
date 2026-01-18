@@ -1,8 +1,9 @@
+import { useMemo } from 'react';
+import { Icon } from '@iconify/react';
 import { ActionIcon, Button, Group, NumberInput, Paper, Select, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useViewportSize } from '@mantine/hooks';
 import { fetchNui } from '../../utils/fetchNui';
-import type { SelectOption } from './CreateWarLayer';
 
 type Props = {
   zones: SelectOption[];
@@ -29,6 +30,19 @@ function CreateWar({ zones, gangs }: Props) {
     },
   });
 
+  // 1. Sort Gangs in Ascending order by label
+  const sortedGangs = useMemo(() => {
+    return [...gangs].sort((a, b) => a.label.localeCompare(b.label));
+  }, [gangs]);
+
+  // 2. Determine Attacker options (disable the one selected in Defender)
+  const attackerGangs = useMemo(() => {
+    return sortedGangs.map((gang) => ({
+      ...gang,
+      disabled: gang.value === form.values.defenderGang,
+    }));
+  }, [sortedGangs, form.values.defenderGang]);
+
   return (
     <div
       style={{
@@ -44,7 +58,7 @@ function CreateWar({ zones, gangs }: Props) {
       <Paper w={400} radius="lg" p="md" shadow="sm" withBorder>
         <Group justify="space-between" mb="md">
           <div />
-          <Text size="lg" fw={500}>
+          <Text size="xl" fw={600}>
             Create War
           </Text>
           <ActionIcon
@@ -53,7 +67,7 @@ function CreateWar({ zones, gangs }: Props) {
             color="red"
             onClick={() => fetchNui('hide-create-war-ui')}
           >
-            X
+            <Icon icon="solar:close-circle-outline" width="24" height="24" />
           </ActionIcon>
         </Group>
 
@@ -64,6 +78,7 @@ function CreateWar({ zones, gangs }: Props) {
           })}
         >
           <Select
+            searchable
             withAsterisk
             label="Zone"
             placeholder="Select zone"
@@ -73,23 +88,30 @@ function CreateWar({ zones, gangs }: Props) {
           />
 
           <Select
+            searchable
             withAsterisk
             label="Defender Gang"
             placeholder="Select defender gang"
-            data={gangs}
-            key={form.key('defenderGang')}
+            data={sortedGangs} // Using sorted list
             {...form.getInputProps('defenderGang')}
+            onChange={(val) => {
+              form.setFieldValue('defenderGang', val ?? '');
+              if (val === form.values.attackerGang) {
+                form.setFieldValue('attackerGang', '');
+              }
+            }}
+            mb="sm"
           />
 
           <Select
+            searchable
             withAsterisk
             label="Attacker Gang"
             placeholder="Select attacker gang"
-            data={gangs}
-            key={form.key('attackerGang')}
+            data={attackerGangs}
             {...form.getInputProps('attackerGang')}
+            mb="sm"
           />
-
           <NumberInput
             withAsterisk
             label="War Time (minutes)"
@@ -99,7 +121,9 @@ function CreateWar({ zones, gangs }: Props) {
           />
 
           <Group justify="flex-end" mt="md">
-            <Button type="submit">Submit</Button>
+            <Button variant="light" type="submit">
+              Submit
+            </Button>
           </Group>
         </form>
       </Paper>

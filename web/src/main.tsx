@@ -8,6 +8,7 @@ import '@gfazioli/mantine-rings-progress/styles.css';
 
 import { MantineProvider } from '@mantine/core';
 import CreateWarLayer from './components/Create/CreateWarLayer';
+import InfluenceUI from './components/InfluenceUI';
 import AppComp from './components/WarStatUi';
 import LocaleProvider from './providers/LocaleProvider';
 import { theme } from './theme/theme';
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <MantineProvider defaultColorScheme="dark" theme={{ ...theme }}>
         <AppComp />
         <CreateWarLayer />
+        <InfluenceUI></InfluenceUI>
       </MantineProvider>
     </LocaleProvider>
   </React.StrictMode>

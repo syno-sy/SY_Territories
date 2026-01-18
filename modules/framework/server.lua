@@ -52,3 +52,14 @@ function GetCoreGangPlayerCount(gangName)
     end
     return count
 end
+
+function GetCorePlayerName(src)
+    if Framework == "qb" then
+        local Player = QBCore.Functions.GetPlayer(src)
+        return Player.PlayerData.name
+    end
+end
+
+AddEventHandler('QBCore:Server:OnGangUpdate', function(source)
+    UpdateGangJob(source)
+end)

@@ -1,7 +1,7 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local Territories = {}
 local ZonePlayers = {}
 local ZoneFights = {}
+
 
 -- =============================
 -- LOAD TERRITORIES
@@ -34,17 +34,6 @@ CreateThread(function()
         )
     end
 end)
-
--- =============================
--- HELPER: GET PLAYER GANG
--- =============================
-function GetCorePlayerGang(src)
-    local Player = QBCore.Functions.GetPlayer(src)
-    if Player and Player.PlayerData.gang then
-        return Player.PlayerData.gang.name
-    end
-    return "none"
-end
 
 -- =============================
 -- PLAYER ENTER / EXIT ZONE
@@ -118,7 +107,7 @@ CreateThread(function()
                     terr.influence = terr.influence - (Config.InfluenceLoss or 1)
                     if terr.influence <= 0 then
                         terr.gang = dominantGang
-                        terr.influence = 50
+                        terr.influence = 1
                     end
                 end
 
@@ -140,7 +129,7 @@ function StartZoneFight(zone, defenderGang, attackerGang, warTime)
     if ZoneFights[zone] then return end
     local initialDuration = warTime or Config.FightTime or 720
     local attackerCount, defenderCount = 0, 0
-    for src, gang in pairs(ZonePlayers[zone] or {}) do
+    for _, gang in pairs(ZonePlayers[zone] or {}) do
         if gang == attackerGang then attackerCount += 1 end
         if gang == defenderGang then defenderCount += 1 end
     end
@@ -152,14 +141,16 @@ function StartZoneFight(zone, defenderGang, attackerGang, warTime)
         defenderGang = defenderGang,
         attackerCount = attackerCount,
         defenderCount = defenderCount,
+        maxAttacker = attackerCount,
+        maxDefender = defenderCount,
         alive = {},
         dead = {}
     }
 
     -- Populate alive table
-    for src, gang in pairs(ZonePlayers[zone] or {}) do
+    for _player, gang in pairs(ZonePlayers[zone] or {}) do
         if gang == attackerGang or gang == defenderGang then
-            ZoneFights[zone].alive[src] = gang
+            ZoneFights[zone].alive[_player] = gang
         end
     end
 
@@ -202,25 +193,6 @@ RegisterNetEvent("SY_Territories:playerDied", function(zone, src)
 end)
 
 -- =============================
--- GET GANG STATUS
--- =============================
-function GetGangStatus(zone)
-    local fight = ZoneFights[zone]
-    if not fight then return {} end
-
-    return {
-        [fight.attackerGang] = {
-            alive = fight.attackerCount,
-            dead = #fight.dead
-        },
-        [fight.defenderGang] = {
-            alive = fight.defenderCount,
-            dead = #fight.dead
-        }
-    }
-end
-
--- =============================
 -- SEND FIGHT DATA TO CLIENT
 -- =============================
 function SendZoneFightData(zone)
@@ -234,12 +206,14 @@ function SendZoneFightData(zone)
         {
             code = "defender",
             gang = fight.defenderGang,
-            value = fight.defenderCount
+            value = fight.defenderCount,
+            max = fight.maxDefender
         },
         {
             code = "attacker",
             gang = fight.attackerGang,
-            value = fight.attackerCount
+            value = fight.attackerCount,
+            max = fight.maxAttacker
         }
     }
 
@@ -271,7 +245,7 @@ RegisterNetEvent("SY_Territories:createWar", function(zone, defenderGang, attack
         return
     end
 
-    StartZoneFight(zone, defenderGang, attackerGang, warTime)
+    StartZoneFight(zone, defenderGang, attackerGang, warTime * 60)
 end)
 
 -- =============================
@@ -283,10 +257,11 @@ end)
 
 
 -- =============================
--- COMMAND FOR TESTING
+-- COMMANDS
 -- =============================
 lib.addCommand('createwar', {
     help = 'Create a war in a territory zone',
+    restricted = 'group.admin'
 }, function(source)
     local result = lib.callback.await(
         'SY_Territories:client:openCreateWarUi',
@@ -297,11 +272,67 @@ lib.addCommand('createwar', {
     return result
 end)
 
+lib.addCommand('setterritory', {
+    help = 'Create a war in a territory zone',
+    params = {
+        {
+            name = 'zone',
+            type = 'string',
+            help = 'The name of the zone to set',
+        },
+        {
+            name = 'gang',
+            type = 'string',
+            help = 'The name of the gang to set',
+        },
+        {
+            name = 'influence',
+            type = 'number',
+            help = 'The influence to set',
+        },
+    },
+    restricted = 'group.admin'
+}, function(source)
+    if Territories[zoneName] then
+        Territories[zoneName].gang = gangName
+        Territories[zoneName].influence = influence or 50
+
+        exports.oxmysql:execute(
+            "UPDATE territories SET gang = ?, influence = ? WHERE name = ?",
+            { gangName, Territories[zoneName].influence, zoneName }
+        )
+        TriggerClientEvent("SY_Territories:sync", -1, Territories)
+        return true
+    end
+    return result
+end)
+-- =============================
+-- STOP WAR
+-- =============================
+lib.addCommand('stopwar', {
+    help = 'Forcefully end a war in a specific zone',
+    params = {
+        {
+            name = 'zone',
+            type = 'string',
+            help = 'The name of the zone to stop the war in',
+        },
+    },
+    restricted = 'group.admin'
+}, function(source, args)
+    local zone = args.zone
+    if ZoneFights[zone] then
+        EndZoneFight(zone)
+        print("War in zone " .. zone .. " has been stopped by " .. GetCorePlayerName(source))
+    else
+        print("No active war found in zone: " .. zone)
+    end
+end)
+
 
 -- =============================
 -- Deat Handler
 -- =============================
--- Listen to QBCore death event
 
 
 RegisterNetEvent("SY_Territories:Server:OnPlayerDead", function(src)
@@ -310,7 +341,6 @@ end)
 
 function PlayerDeadHandler(src)
     print("Player death Functions received")
-    -- Find player's zone
     local zone = nil
     for z, players in pairs(ZonePlayers) do
         if players[src] then
@@ -327,17 +357,83 @@ function PlayerDeadHandler(src)
 
     local gang = fight.alive[src]
 
-    -- Move to dead list
     fight.alive[src] = nil
     fight.dead[src] = gang
 
-    -- Reduce count
     if gang == fight.attackerGang then
         fight.attackerCount = math.max(0, fight.attackerCount - 1)
     elseif gang == fight.defenderGang then
         fight.defenderCount = math.max(0, fight.defenderCount - 1)
     end
 
-    -- Send update to clients
     SendZoneFightData(zone)
 end
+
+-- =============================
+-- EVENT HANDLER
+-- =============================
+AddEventHandler('onResourceStop', function(resource)
+    if resource == GetCurrentResourceName() then
+        for zone, fight in pairs(ZoneFights) do
+            EndZoneFight(zone)
+        end
+    end
+end)
+
+
+-- =============================
+-- EVENT HANDLER
+-- =============================
+function UpdateGangJob(source)
+    TriggerClientEvent("SY_Territories:syncOnPlayerGangChange", -1)
+end
+
+-- =============================
+-- EXPORTS
+-- =============================
+
+--- Returns the gang name owning the zone
+--- @param zoneName string
+exports('GetZoneOwner', function(zoneName)
+    if Territories[zoneName] then
+        return Territories[zoneName].gang
+    end
+    return nil
+end)
+
+--- Returns the influence of a zone
+--- @param zoneName string
+exports('GetZoneInfluence', function(zoneName)
+    if Territories[zoneName] then
+        return Territories[zoneName].influence
+    end
+    return 0
+end)
+
+--- Returns full data for a zone
+--- @param zoneName string
+--- @returns {gang: string, influence: number}
+exports('GetZoneData', function(zoneName)
+    return Territories[zoneName]
+end)
+
+--- Returns table of all active fights
+exports('GetActiveFights', function()
+    return ZoneFights
+end)
+
+--- Manually set a zone's owner
+exports('SetZoneOwner', function(zoneName, gangName, influence)
+    if Territories[zoneName] then
+        Territories[zoneName].gang = gangName
+        Territories[zoneName].influence = influence or 50
+
+        exports.oxmysql:execute(
+            "UPDATE territories SET gang = ?, influence = ? WHERE name = ?",
+            { gangName, Territories[zoneName].influence, zoneName }
+        )
+        TriggerClientEvent("SY_Territories:sync", -1, Territories)
+        return true
+    end
+    return false
+end)

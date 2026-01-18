@@ -13,6 +13,7 @@ interface GangStatus {
   code: 'defender' | 'attacker';
   gang: string;
   value: number;
+  max: number;
 }
 
 interface TimerData {
@@ -20,3 +21,8 @@ interface TimerData {
   seconds: number;
   total: number;
 }
+
+interface SelectOption {
+  value: string;
+  label: string;
+};

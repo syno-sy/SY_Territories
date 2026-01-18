@@ -1,4 +1,4 @@
-local NotificationTitle = "SY_ReactTemplate"
+local NotificationTitle = "SY_Territories"
 
 if not GetResourceState('ox_lib'):find('start') then
     print('ox_lib should be started before this resource')
@@ -6,7 +6,9 @@ if not GetResourceState('ox_lib'):find('start') then
     if not lib or not cache then return end
 end
 
+-- =============================
 -- Load locale
+-- =============================
 RegisterNUICallback('loadLocale', function(_, cb)
     cb(1)
     local locale = Config.language or 'en'

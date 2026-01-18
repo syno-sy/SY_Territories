@@ -1,9 +1,21 @@
--- Show War Status UI
-function ShowUI(arg, data)
+-- =============================
+-- Show Influence Ui
+-- =============================
+function ShowInfluenceUi(data)
     SendNUIMessage({
         action = 'showInfluenceUi',
-        data = arg,
+        data = data,
     })
+end
+
+function HideInfluenceUi()
+    SendNUIMessage({ action = 'hideInfluenceUi' })
+end
+
+-- =============================
+-- Show War Status
+-- =============================
+function ShowWarUI(arg, data)
     SendNUIMessage({
         action = 'setWarStatVisible',
         data = {
@@ -16,8 +28,9 @@ function ShowUI(arg, data)
     })
 end
 
--- Create War
-
+-- =============================
+-- Create War UI
+-- =============================
 lib.callback.register('SY_Territories:client:openCreateWarUi', function()
     local gangs = lib.callback.await('SY_Territories:server:getGangs', false)
     local Result = {}

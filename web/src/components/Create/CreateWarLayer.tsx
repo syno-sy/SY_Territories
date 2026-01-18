@@ -3,11 +3,9 @@ import { useNuiEvent } from '../../hooks/useNuiEvent';
 import { debugData } from '../../utils/debugData';
 import CreateWar from './CreateWar';
 
-export type SelectOption = {
-  value: string;
-  label: string;
-};
-
+/* ------------------------------------------------------------------ */
+/* Debug */
+/* ------------------------------------------------------------------ */
 debugData(
   [
     {
