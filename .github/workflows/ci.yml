@@ -12,9 +12,18 @@ jobs:
         working-directory: web
 
     steps:
+      # 1. Checkout
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. Install pnpm FIRST (puts pnpm in PATH)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      # 3. Setup Node.js + pnpm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -22,15 +31,10 @@ jobs:
           cache: pnpm
           cache-dependency-path: web/pnpm-lock.yaml
 
-      # 🔑 This installs pnpm and puts it in PATH
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-          run_install: false
-
+      # 4. Install dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # 5. Build
       - name: Build
         run: pnpm build
