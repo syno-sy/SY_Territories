@@ -8,9 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@gfazioli/mantine-border-animate':
+        specifier: ^0.3.4
+        version: 0.3.4(@mantine/core@8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@mantine/hooks@8.3.12(react@19.2.3))(@tabler/icons-react@3.36.1(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@gfazioli/mantine-rings-progress':
+        specifier: ^2.3.9
+        version: 2.3.9(@mantine/core@8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@mantine/hooks@8.3.12(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@mantine/core':
         specifier: 8.3.12
         version: 8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@mantine/form':
+        specifier: ^8.3.12
+        version: 8.3.12(react@19.2.3)
       '@mantine/hooks':
         specifier: 8.3.12
         version: 8.3.12(react@19.2.3)
@@ -321,6 +330,23 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
+  '@gfazioli/mantine-border-animate@0.3.4':
+    resolution: {integrity: sha512-0u0QRom+N2f/TL3hlgj/FAGNOvaXWEsGa7OPPU6Kmc/fM/Dc+pi2Irm9+sFUZUb4RKfiELWsLUqohy9y04QM+Q==}
+    peerDependencies:
+      '@mantine/core': '>=7.0.0'
+      '@mantine/hooks': '>=7.0.0'
+      '@tabler/icons-react': ^3.34.0
+      react: ^18.x || ^19.x
+      react-dom: ^18.x || ^19.x
+
+  '@gfazioli/mantine-rings-progress@2.3.9':
+    resolution: {integrity: sha512-+/gNUJCKL/0lrqIcrd3muUu+4SAEky90Av+MAWdmGwLXUTBY9UncSxvYYXik3YKfnA9zCH367oGpYIsgiWXBEQ==}
+    peerDependencies:
+      '@mantine/core': '>=7.0.0'
+      '@mantine/hooks': '>=7.0.0'
+      react: ^18.x || ^19.x
+      react-dom: ^18.x || ^19.x
+
   '@ianvs/prettier-plugin-sort-imports@4.7.0':
     resolution: {integrity: sha512-soa2bPUJAFruLL4z/CnMfSEKGznm5ebz29fIa9PxYtu8HHyLKNE1NXAs6dylfw1jn/ilEIfO2oLLN6uAafb7DA==}
     peerDependencies:
@@ -369,6 +395,11 @@ packages:
       '@mantine/hooks': 8.3.12
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
+
+  '@mantine/form@8.3.12':
+    resolution: {integrity: sha512-bjXL1Ah3lAZYHrjrF37FeHV8DFGeXV+apn0PRQw2MTLpdUSqKsiYIDDgugzRfNXWX1cn1ELtxtDXsMfdj/LI7Q==}
+    peerDependencies:
+      react: ^18.x || ^19.x
 
   '@mantine/hooks@8.3.12':
     resolution: {integrity: sha512-lMMDzDewd3lUNtJCAHDj3g8On9X5aBl4q6EBwgOixKQSby9RG9ASEpK8oYHundHTm9tzo3MDeXWV/z32oSQWuw==}
@@ -503,6 +534,14 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@tabler/icons-react@3.36.1':
+    resolution: {integrity: sha512-/8nOXeNeMoze9xY/QyEKG65wuvRhkT3q9aytaur6Gj8bYU2A98YVJyLc9MRmc5nVvpy+bRlrrwK/Ykr8WGyUWg==}
+    peerDependencies:
+      react: '>= 16'
+
+  '@tabler/icons@3.36.1':
+    resolution: {integrity: sha512-f4Jg3Fof/Vru5ioix/UO4GX+sdDsF9wQo47FbtvG+utIYYVQ/QVAC0QYgcBbAjQGfbdOh2CCf0BgiFOF9Ixtjw==}
+
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
 
@@ -587,6 +626,9 @@ packages:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
 
+  fast-deep-equal@3.1.3:
+    resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
   fdir@6.5.0:
     resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
     engines: {node: '>=12.0.0'}
@@ -621,6 +663,10 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
+
+  klona@2.0.6:
+    resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
+    engines: {node: '>= 8'}
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -1104,6 +1150,21 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
+  '@gfazioli/mantine-border-animate@0.3.4(@mantine/core@8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@mantine/hooks@8.3.12(react@19.2.3))(@tabler/icons-react@3.36.1(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@mantine/core': 8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@mantine/hooks': 8.3.12(react@19.2.3)
+      '@tabler/icons-react': 3.36.1(react@19.2.3)
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+
+  '@gfazioli/mantine-rings-progress@2.3.9(@mantine/core@8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@mantine/hooks@8.3.12(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@mantine/core': 8.3.12(@mantine/hooks@8.3.12(react@19.2.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@mantine/hooks': 8.3.12(react@19.2.3)
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+
   '@ianvs/prettier-plugin-sort-imports@4.7.0(prettier@3.7.4)':
     dependencies:
       '@babel/generator': 7.28.6
@@ -1154,6 +1215,12 @@ snapshots:
       type-fest: 4.41.0
     transitivePeerDependencies:
       - '@types/react'
+
+  '@mantine/form@8.3.12(react@19.2.3)':
+    dependencies:
+      fast-deep-equal: 3.1.3
+      klona: 2.0.6
+      react: 19.2.3
 
   '@mantine/hooks@8.3.12(react@19.2.3)':
     dependencies:
@@ -1235,6 +1302,13 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.55.1':
     optional: true
+
+  '@tabler/icons-react@3.36.1(react@19.2.3)':
+    dependencies:
+      '@tabler/icons': 3.36.1
+      react: 19.2.3
+
+  '@tabler/icons@3.36.1': {}
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -1340,6 +1414,8 @@ snapshots:
 
   escalade@3.2.0: {}
 
+  fast-deep-equal@3.1.3: {}
+
   fdir@6.5.0(picomatch@4.0.3):
     optionalDependencies:
       picomatch: 4.0.3
@@ -1356,6 +1432,8 @@ snapshots:
   jsesc@3.1.0: {}
 
   json5@2.2.3: {}
+
+  klona@2.0.6: {}
 
   lru-cache@5.1.1:
     dependencies:

@@ -1,5 +1,8 @@
 import { createTheme } from '@mantine/core';
 
 export const theme = createTheme({
-  // theme override add here
+  fontFamily: 'Iceland, sans-serif',
+  headings: {
+    fontFamily: 'Iceland, sans-serif',
+  },
 });

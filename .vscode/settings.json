@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["handleclose", "ianvs"]
+  "cSpell.words": [
+    "handleclose",
+    "ianvs",
+    "isdead"
+  ],
+  "Lua.diagnostics.disable": [
+    "undefined-field",
+    "undefined-global"
+  ]
 }

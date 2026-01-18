@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 
 import './index.css';
 import '@mantine/core/styles.css';
+import '@gfazioli/mantine-border-animate/styles.css';
+import '@gfazioli/mantine-rings-progress/styles.css';
 
 import { MantineProvider } from '@mantine/core';
-import App from './App';
+import CreateWarLayer from './components/Create/CreateWarLayer';
+import AppComp from './components/WarStatUi';
 import LocaleProvider from './providers/LocaleProvider';
-import { VisibilityProvider } from './providers/VisibilityProvider';
 import { theme } from './theme/theme';
 import { debugData } from './utils/debugData';
 import { isEnvBrowser } from './utils/misc';
@@ -29,14 +31,11 @@ if (isEnvBrowser()) {
 }
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <VisibilityProvider>
-      <LocaleProvider>
-        <MantineProvider defaultColorScheme="dark" theme={{ ...theme }}>
-          <div className="iceland-regular">
-            <App></App>
-          </div>
-        </MantineProvider>
-      </LocaleProvider>
-    </VisibilityProvider>
+    <LocaleProvider>
+      <MantineProvider defaultColorScheme="dark" theme={{ ...theme }}>
+        <AppComp />
+        <CreateWarLayer />
+      </MantineProvider>
+    </LocaleProvider>
   </React.StrictMode>
 );

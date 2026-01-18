@@ -1,21 +1,15 @@
 local Territories = {}
 local currentZone = nil
+local lastZone = nil
+local lastInfluence = nil
+local lastGang = nil
+local currentFight = nil
 
+-- =============================
+-- SYNC TERRITORIES FROM SERVER
+-- =============================
 RegisterNetEvent("SY_Territories:sync", function(data)
     Territories = data
-end)
-
-local playerGang = "none"
-
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    local data = exports.qbx_core:GetPlayerData()
-    if data.gang then
-        playerGang = data.gang.name
-    end
-end)
-
-RegisterNetEvent('QBCore:Client:OnGangUpdate', function(gang)
-    playerGang = gang.name
 end)
 
 -- =============================
@@ -34,41 +28,102 @@ for zone, data in pairs(Config.Territories) do
             onExit = function()
                 currentZone = nil
                 TriggerServerEvent("SY_Territories:leaveZone", zone)
+                currentFight = nil
             end
         })
     end
 end
 
 -- =============================
--- DRAW HUD
+-- HUD LOOP (active only during fight)
 -- =============================
 CreateThread(function()
     while true do
-        if currentZone and Territories[currentZone] then
-            local terr = Territories[currentZone]
-            ShowUI(true, {
-                zone = currentZone,
-                gang = terr.gang,
-                influence = terr.influence,
-            })
+        local waitTime = 1000
 
-            -- DrawTxt(
-            --     ("Zone: ~b~%s\n~s~Gang: ~r~%s\n~s~Influence: ~g~%d%%")
-            --     :format(currentZone, terr.gang, terr.influence),
-            --     0.015, 0.02
-            -- )
+        if currentZone and Territories[currentZone] and currentFight then
+            local terr = Territories[currentZone]
+            if lastZone ~= currentZone or lastGang ~= terr.gang or lastInfluence ~= terr.influence then
+                local GangColorCode = GetGangColorCode(terr.gang) or "255, 255, 255"
+                ShowUI(true, {
+                    zone = currentZone,
+                    gang = terr.gang,
+                    influence = terr.influence,
+                    gangColor = GangColorCode
+                })
+
+                lastZone = currentZone
+                lastGang = terr.gang
+                lastInfluence = terr.influence
+            end
+
+            waitTime = 250 -- update faster during fight
         else
-            ShowUI(false, nil)
+            if lastZone ~= nil then
+                ShowUI(false, nil)
+                lastZone = nil
+                lastGang = nil
+                lastInfluence = nil
+            end
         end
-        Wait(0)
+
+        Wait(waitTime)
     end
 end)
 
--- function DrawTxt(text, x, y)
---     SetTextFont(4)
---     SetTextScale(0.45, 0.45)
---     SetTextOutline()
---     BeginTextCommandDisplayText("STRING")
---     AddTextComponentSubstringPlayerName(text)
---     EndTextCommandDisplayText(x, y)
--- end
+-- =============================
+-- GANG COLOR HELPER
+-- =============================
+function GetGangColorCode(gang)
+    if Config.Gangs[gang] and Config.Gangs[gang].color then
+        local r, g, b = colorsRGB.RGB(Config.Gangs[gang].color)
+        return string.format("%d, %d, %d", r, g, b)
+    end
+    return "255, 255, 255"
+end
+
+-- =============================
+-- ZONE FIGHT UPDATE EVENT
+-- =============================
+RegisterNetEvent("SY_Territories:zoneFightUpdate", function(zone, data)
+    if currentZone ~= zone then
+        currentFight = nil
+        return
+    end
+
+    print(json.encode(data.timer))
+    currentFight = data
+    SendNUIMessage({
+        action = 'setTimerData',
+        data = data.timer
+    })
+
+
+    SendNUIMessage({
+        action = 'setGangStatus',
+        data = data.gangs
+    })
+end)
+
+-- =============================
+-- ZONE FIGHT END EVENT
+-- =============================
+RegisterNetEvent("SY_Territories:zoneFightEnd", function(zone)
+    if currentZone == zone then
+        currentFight = nil
+        ShowUI(false, nil)
+    end
+end)
+
+-- =============================
+-- CREATE WAR KEYBIND
+-- =============================
+lib.addKeybind({
+    name = 'Create War',
+    description = 'press J to create a war',
+    defaultKey = 'J',
+    onPressed = function(self)
+        CreateWar()
+        print(('pressed %s (%s)'):format(self.currentKey, self.name))
+    end,
+})

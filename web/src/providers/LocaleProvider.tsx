@@ -16,7 +16,7 @@ debugData(
       },
     },
   ],
-  2000
+  10
 );
 
 interface LocaleContextValue {

@@ -12,7 +12,10 @@
     "prettier": "prettier --check \"**/*.{ts,tsx}\""
   },
   "dependencies": {
+    "@gfazioli/mantine-border-animate": "^0.3.4",
+    "@gfazioli/mantine-rings-progress": "^2.3.9",
     "@mantine/core": "8.3.12",
+    "@mantine/form": "^8.3.12",
     "@mantine/hooks": "8.3.12",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"

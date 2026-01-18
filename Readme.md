@@ -1,54 +1,29 @@
-## Requirements
+<!-- How To -->
 
-- [Node > v20.11](https://nodejs.org/en/)
-
-_A basic understanding of the modern web development workflow. If you don't
-know this yet, React might not be for you just yet._
-
-## Getting Started
-
-First clone the repository or use the template option and place
-it within your `resources` folder
-
-### Installation
-
-Install dependencies by navigating to the `web` folder within
-a terminal of your choice and type `yarn install`.
-
-**Hot Builds In-Game**
-
-When developing in-game, you can use the hot build system by
-running the `yarn run start:game` script. This is essentially the start
-script but it writes to disk. Meaning all that is required is a
-resource restart to update the game script
-
-**Usage in-web development**
-
-```sh
-# yarn
-yarn run dev
+``` lua
+-- qb-ambulancejob/server.lua
+RegisterNetEvent('hospital:server:SetLaststandStatus', function(bool)
+	local src = source
+	local Player = QBCore.Functions.GetPlayer(src)
+	if Player then
+		Player.Functions.SetMetaData('inlaststand', bool)
+		TriggerEvent("SY_Territories:Server:OnPlayerDead", src)
+	end
+end)
 ```
 
-**Production Builds**
 
-When you are done with development phase for your resource. You
-must create a production build that is optimized and minimized.
-
-You can do this by running the following:
-
-```sh
-yarn run build
-```
-
-This is purely not my stuff  
-credits:- https://github.com/project-error/fivem-react-boilerplate-lua
-
-
-
-
-
-
-<!-- no gang  -->
-```sql
-{"grade":{"level":0,"name":"Unaffiliated"},"bankAuth":false,"isboss":false,"name":"none","label":"No Gang"}
-```
+start war through ui
+- options 
+  - zone
+  - defender
+  - attacker
+  - time
+- click confirm
+  - 30 sec cool off time (ui should show)
+  - if influence of the defender not 100 then set it to 100 
+  - war started announcement after 30sec cool off time
+  - get the total member from defender and attacker then from the total if any player dead while on war in the ui it should show like dead member gang total-1.
+  - show ui when inside the zone.
+  - update timer frequently.
+  - 

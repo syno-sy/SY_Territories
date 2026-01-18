@@ -14,12 +14,11 @@ ui_page 'web/build/index.html'
 
 shared_scripts {
   '@ox_lib/init.lua',
-  '@qbx_core/modules/lib.lua',
   "shared/**/*"
 }
-client_scripts { '@qbx_core/modules/playerdata.lua', "client/**/*" }
-server_script "server/**/*"
-
+client_scripts { 'modules/framework/client.lua', "client/**/*" }
+server_scripts { 'modules/framework/server.lua', "server/**/*"
+}
 files {
   'locales/*.json',
   'web/build/index.html',
