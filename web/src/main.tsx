@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import './index.css';
 import '@mantine/core/styles.css';
-import '@gfazioli/mantine-border-animate/styles.css';
-import '@gfazioli/mantine-rings-progress/styles.css';
 
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { MantineProvider } from '@mantine/core';
 import CreateWarLayer from './components/Create/CreateWarLayer';
 import InfluenceUI from './components/InfluenceUI';
@@ -22,22 +21,41 @@ debugData([
   },
 ]);
 
+function Root() {
+  const [influencePos, setInfluencePos] = useState({ x: 0, y: 0 });
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    if (event.active.id === 'influence-ui-box' && event.delta) {
+      setInfluencePos((pos) => ({
+        x: pos.x + event.delta.x,
+        y: pos.y + event.delta.y,
+      }));
+    }
+  };
+
+  return (
+    <LocaleProvider>
+      <MantineProvider defaultColorScheme="dark" theme={{ ...theme }}>
+        <DndContext onDragEnd={handleDragEnd}>
+          <AppComp />
+          <CreateWarLayer />
+          <InfluenceUI position={influencePos} />
+        </DndContext>
+      </MantineProvider>
+    </LocaleProvider>
+  );
+}
+
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
-  // https://i.imgur.com/iPTAdYV.png - Night time img
   root!.style.backgroundImage = 'url("https://i.imgur.com/3pzRj9n.png")';
   root!.style.backgroundSize = 'cover';
   root!.style.backgroundRepeat = 'no-repeat';
   root!.style.backgroundPosition = 'center';
 }
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <LocaleProvider>
-      <MantineProvider defaultColorScheme="dark" theme={{ ...theme }}>
-        <AppComp />
-        <CreateWarLayer />
-        <InfluenceUI></InfluenceUI>
-      </MantineProvider>
-    </LocaleProvider>
+    <Root />
   </React.StrictMode>
 );
