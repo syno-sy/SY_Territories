@@ -331,6 +331,15 @@ end)
 
 
 -- =============================
+-- SET INFLUENCE UI POSITION
+-- =============================
+lib.addCommand('setinfuipos', {
+    help = 'Set the influence UI position',
+}, function(source)
+    TriggerClientEvent('SY_Territories:client:setInfluenceUiPosition', source)
+end)
+
+-- =============================
 -- Deat Handler
 -- =============================
 

@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client';
 
 import './index.css';
 import '@mantine/core/styles.css';
+import '@gfazioli/mantine-rings-progress/styles.css';
 
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { MantineProvider } from '@mantine/core';
 import CreateWarLayer from './components/Create/CreateWarLayer';
 import InfluenceUI from './components/InfluenceUI';
 import AppComp from './components/WarStatUi';
+import { useNuiEvent } from './hooks/useNuiEvent';
 import LocaleProvider from './providers/LocaleProvider';
 import { theme } from './theme/theme';
 import { debugData } from './utils/debugData';
@@ -24,13 +26,17 @@ debugData([
 function Root() {
   const [influencePos, setInfluencePos] = useState({ x: 0, y: 0 });
 
+  useNuiEvent('getInfluenceUiPosition', (data) => {
+    setInfluencePos(data);
+  });
+
   const handleDragEnd = (event: DragEndEvent) => {
-    if (event.active.id === 'influence-ui-box' && event.delta) {
-      setInfluencePos((pos) => ({
-        x: pos.x + event.delta.x,
-        y: pos.y + event.delta.y,
-      }));
-    }
+    if (event.active.id !== 'influence-ui-box') return;
+
+    setInfluencePos((pos) => ({
+      x: pos.x + event.delta.x,
+      y: pos.y + event.delta.y,
+    }));
   };
 
   return (

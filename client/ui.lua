@@ -72,3 +72,44 @@ RegisterNUICallback('createWar', function(data, cb)
     SendNUIMessage({ action = 'hideCreateWarUi' })
     cb({})
 end)
+
+
+-- Influence UI Position
+
+RegisterNetEvent('SY_Territories:client:setInfluenceUiPosition', function()
+    SetInfluenceUIPosition()
+end)
+
+function SetInfluenceUIPosition()
+    SetNuiFocus(true, true)
+    SendNUIMessage({
+        action = 'setInfluenceUiPosition',
+        data = {
+            zone = "Zone",
+            gang = "Gang",
+            influence = 70,
+            gangColor = "255, 255, 255"
+        }
+    })
+end
+
+RegisterNUICallback('setInfluenceUiPositionData', function(data, cb)
+    SetNuiFocus(false, false)
+    SetResourceKvp(
+        'territory_influence_ui_pos',
+        json.encode({ x = data.x, y = data.y })
+    )
+    cb('ok')
+end)
+
+
+
+AddEventHandler('onResourceStart', function(res)
+    local pos = GetResourceKvpString('territory_influence_ui_pos')
+    if pos then
+        SendNUIMessage({
+            action = 'getInfluenceUiPosition',
+            data = json.decode(pos)
+        })
+    end
+end)

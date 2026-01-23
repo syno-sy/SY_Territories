@@ -48,7 +48,7 @@ export default function AppComp() {
   const [visible, setVisible] = useState(isEnvBrowser());
   const { width, height } = useViewportSize();
 
-  const [value, setValue] = useState({ x: 1, y: 1 });
+  const [value, setValue] = useState({ x: 1, y: 0.5 });
   const { ref } = useMove(setValue);
 
   const [uiData, setUiData] = useState<UiData | null>(null);
