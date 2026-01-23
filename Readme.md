@@ -10,7 +10,10 @@ The gang that controls the area will have access to the zones resources.
 
 
 
-![SY_TerritoriesV3]('./imgs/image.png')
+![SY_TerritoriesV3](./imgs/img1.png)
+![SY_TerritoriesV3](./imgs/img2.png)
+![SY_TerritoriesV3](./imgs/img3.png)
+
 
 ``` lua
 -- Will change it in future
