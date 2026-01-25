@@ -17,8 +17,7 @@ shared_scripts {
   "shared/**/*"
 }
 client_scripts { 'modules/framework/client.lua', "client/**/*" }
-server_scripts { 'modules/framework/server.lua', "server/**/*"
-}
+server_scripts { 'modules/framework/server.lua', "server/**/*" }
 files {
   'locales/*.json',
   'web/build/index.html',

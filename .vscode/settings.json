@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "chamberlainhills",
     "gfazioli",
     "handleclose",
     "ianvs",
@@ -9,6 +10,7 @@
   ],
   "Lua.diagnostics.disable": [
     "undefined-field",
-    "undefined-global"
+    "undefined-global",
+    "missing-parameter"
   ]
 }
