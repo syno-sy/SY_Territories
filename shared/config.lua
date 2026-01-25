@@ -8,9 +8,8 @@ Config = {}
 --  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
 
 Config.Locale = "en"
-Config.Framework = "qb"    -- options qb, qbox, esx, standalone
-Config.Notification = "qb" -- options qb, qbox, esx, ox, standalone
-Config.Glob = false        -- Globally visible marker on zone if war is active
+Config.Framework = "esx" -- options qb, qbox, esx, standalone
+Config.Glob = true       -- Globally visible marker on zone if war is active
 Config.InfluenceTick = 2000
 Config.InfluenceGain = 1
 Config.InfluenceLoss = 1
@@ -130,6 +129,10 @@ Config.Gangs = {
     ["tga"] = {
         color = "yellow",
         label = "TGA",
+    },
+    ["srra"] = {
+        color = "yellow",
+        label = "SRRA",
     },
 }
 

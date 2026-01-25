@@ -1,5 +1,5 @@
 SY = SY or {}
-
+lib.locale()
 local Framework = Config and Config.Framework or 'qb'
 
 local QBCore, QboxCore, ESX
@@ -23,8 +23,8 @@ function SY:ClientNotification(type, message, time, title, position)
 
     local nType     = type or 'info'
     local nTime     = time or 5000
-    local nTitle    = title or 'SY_Territories'
-    local nPosition = position or 'top-right'
+    local nTitle    = title or locale("msg_Title")
+    local nPosition = position or 'middle-right'
 
     if Framework == 'qb' then
         -- QB-Core notify
@@ -47,7 +47,7 @@ function SY:ClientNotification(type, message, time, title, position)
         end
     elseif Framework == 'esx' then
         if exports['esx_notify'] then
-            exports['esx_notify']:Notify(nType, message, nTime, nTitle, nPosition)
+            exports["esx_notify"]:Notify(nType, nTime, message, nTitle, nPosition)
         elseif ESX and ESX.ShowNotification then
             ESX.ShowNotification(message)
         else

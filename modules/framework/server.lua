@@ -1,5 +1,5 @@
 SY = SY or {}
-
+lib.locale()
 local Framework = Config and Config.Framework or 'qb'
 
 local QBCore, QboxCore, ESX
@@ -175,6 +175,13 @@ if Framework == 'qb' then
             UpdateGangJob(source)
         end
     end)
+    RegisterNetEvent('hospital:server:SetLaststandStatus', function(bool)
+        local src = source
+        local Player = QBCore.Functions.GetPlayer(src)
+        if Player then
+            TriggerEvent("SY_Territories:Server:OnPlayerDead", src)
+        end
+    end)
 end
 if Framework == 'qbox' then
     AddEventHandler('qbx_core:server:playerGangUpdated', function(source, newGang, oldGang)
@@ -182,11 +189,18 @@ if Framework == 'qbox' then
             UpdateGangJob(source)
         end
     end)
+    RegisterNetEvent('hospital:server:SetLaststandStatus', function(bool)
+        local src = source
+        local Player = QboxCore.Functions.GetPlayer(src)
+        if Player then
+            TriggerEvent("SY_Territories:Server:OnPlayerDead", src)
+        end
+    end)
 end
 
 if Framework == 'esx' then
-    AddEventHandler('esx:setJob', function(src, job, lastJob)
-        if UpdateGangJob then
+    AddEventHandler('esx:setJob', function(src, job)
+        if job and job.type == "gang" or job.name == "police" then
             UpdateGangJob(src)
         end
     end)
@@ -213,7 +227,7 @@ function SY:ServerNotification(type, message, src, time, title, position)
     local nType     = type or 'info'
     local nTime     = time or 5000
     local nTitle    = title or 'SY_Territories'
-    local nPosition = position or 'top-right'
+    local nPosition = position or 'middle-right'
     local target    = src or -1
     TriggerClientEvent('SY_Territories:client:notify', target, nType, message, nTime, nTitle, nPosition)
 end

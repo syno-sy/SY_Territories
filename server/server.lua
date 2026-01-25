@@ -28,6 +28,15 @@ local function execute(query, params, cb)
 end
 
 
+function GetZoneLabel(zone)
+    return Config.Territories[zone].label
+end
+
+function GetGangLabel(gang)
+    if not gang then return gang end
+    return Config.Gangs[gang].label
+end
+
 -- =============================
 -- LOAD TERRITORIES
 -- =============================
@@ -198,8 +207,7 @@ end
 
 function StartZoneFight(zone, defenderGang, attackerGang, warTime)
     if ZoneFights[zone] then return end
-
-    SY:ServerNotification('success', 'War started in zone: ' .. zone)
+    SY:ServerNotification('success', locale('msg_WarStarted', GetZoneLabel(zone)))
     TriggerClientEvent("SY_Territories:Client:CreateZoneGlob", -1, zone)
 
     local initialDuration = warTime or Config.FightTime or 720
@@ -250,6 +258,7 @@ function StartZoneFight(zone, defenderGang, attackerGang, warTime)
 end
 
 function EndZoneFight(zone)
+    SY:ServerNotification('info', locale('msg_WarEnded', GetZoneLabel(zone)))
     TriggerClientEvent("SY_Territories:zoneFightEnd", -1, zone)
     TriggerClientEvent("SY_Territories:Client:RemoveZoneGlob", -1)
     ZoneFights[zone] = nil
@@ -299,16 +308,16 @@ end)
 -- =============================
 RegisterNetEvent("SY_Territories:createWar", function(zone, defenderGang, attackerGang, warTime)
     if ZoneFights[zone] then
-        SY:ServerNotification('error', 'War already active in zone: ' .. zone)
+        SY:ServerNotification('error', locale('msg_WarAlreadyActive', GetZoneLabel(zone)))
         return
     end
     if not Config.Territories[zone] then
-        SY:ServerNotification('error', 'Invalid zone: ' .. zone)
+        SY:ServerNotification('error', locale('msg_InvalidZone', GetZoneLabel(zone)))
         return
     end
 
     if not Config.Gangs[defenderGang] or not Config.Gangs[attackerGang] then
-        SY:ServerNotification('error', 'Invalid gangs ' .. defenderGang .. ', ' .. attackerGang)
+        SY:ServerNotification('error', locale('msg_InvalidGang', GetGangLabel(defenderGang), GetGangLabel(attackerGang)))
         return
     end
 
@@ -391,7 +400,7 @@ lib.addCommand('stopwar', {
     if ZoneFights[zone] then
         EndZoneFight(zone)
     else
-        SY:ServerNotification('error', 'No active war found in zone: ' .. zone)
+        SY:ServerNotification('error', locale('msg_NoActiveWar', GetZoneLabel(zone)))
     end
 end)
 
@@ -407,6 +416,34 @@ lib.addCommand('setwaruipos', {
     TriggerClientEvent('SY_Territories:client:setWarUiPosition', source)
 end)
 
+
+lib.addCommand('setwarglob', {
+    help = 'Set the war Glob for zone',
+    params = {
+        {
+            name = 'zone',
+            type = 'string',
+            help = 'The name of the zone to set',
+        }
+    },
+    restricted = 'group.admin'
+}, function(source, args)
+    print(args.zone)
+    TriggerClientEvent("SY_Territories:Client:CreateZoneGlob", -1, args.zone)
+end)
+lib.addCommand('removewarglob', {
+    help = 'Remove the war Glob for zone',
+    params = {
+        {
+            name = 'zone',
+            type = 'string',
+            help = 'The name of the zone to set',
+        }
+    },
+    restricted = 'group.admin'
+}, function(source, args)
+    TriggerClientEvent("SY_Territories:Client:RemoveZoneGlob", -1, args.zone)
+end)
 -- =============================
 -- GANG JOB UPDATE
 -- =============================

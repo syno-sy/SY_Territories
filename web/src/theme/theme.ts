@@ -10,11 +10,11 @@ const uiColor: MantineColorsTuple = [
   '#c02adf',
   '#a91cc6',
   '#9715b1',
-  '#84099c'
+  '#84099c',
 ];
 
 export const theme = createTheme({
- colors: {
+  colors: {
     uiColor,
   },
   primaryColor: 'uiColor',

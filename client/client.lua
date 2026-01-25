@@ -11,7 +11,6 @@ local warZoneRadius = nil
 local warZoneVisible = false
 isInsideZone = false
 
-
 local Config = Config
 local TerritoriesConfig = Config.Territories
 local GangsConfig = Config.Gangs

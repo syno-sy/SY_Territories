@@ -1,16 +1,21 @@
 {
   "cSpell.words": [
     "chamberlainhills",
+    "Colour",
     "gfazioli",
     "handleclose",
     "ianvs",
     "iconify",
     "isdead",
+    "Qbox",
     "stopwar"
   ],
   "Lua.diagnostics.disable": [
     "undefined-field",
     "undefined-global",
     "missing-parameter"
+  ],
+  "Lua.diagnostics.globals": [
+    "isInsideZone"
   ]
 }

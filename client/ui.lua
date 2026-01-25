@@ -30,7 +30,7 @@ local function loadUiPosition(kvpKey)
 end
 
 local function notifyInfo(msg)
-    SY:ClientNotification('info', msg)
+    SY:ClientNotification("info", msg)
 end
 
 -- =============================
@@ -118,9 +118,9 @@ RegisterNetEvent('SY_Territories:client:setInfluenceUiPosition', function()
     SetInfluenceUIPosition()
 end)
 
-function SetInfluenceUIPosition()
+function SetInfluenceUIPosition(l)
     if isInsideZone then
-        notifyInfo('To set the influence UI position, you must not be inside the zone')
+        notifyInfo(locale('msg_isInZone'))
         return
     end
 
@@ -166,7 +166,7 @@ end)
 
 function SetWarUIPosition()
     if isInsideZone then
-        notifyInfo('To set the war UI position, you must not be inside the zone')
+        notifyInfo(locale('msg_isInZone'))
         return
     end
 

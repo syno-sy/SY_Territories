@@ -1,3 +1,11 @@
 {
-  "ui_TextInfluence": "Influence"
+  "ui_TextInfluence": "Influence",
+  "msg_WarStarted": "War started in Zone: %s",
+  "msg_WarAlreadyActive": "War already active in zone: %s",
+  "msg_NoActiveWar": "No active war found in zone: %s",
+  "msg_invalidZone": "Invalid zone: %s",
+  "mag_invalidGang": "Invalid gang: %s or %s",
+  "msg_WarEnded": "War ended in zone: %s",
+  "msg_Title": "SY_Territories",
+  "msg_isInZone":"To set the influence UI position, you must not be inside the zone"
 }

@@ -9,7 +9,6 @@ interface UiData {
   influence: number;
 }
 
-
 interface GangStatus {
   code: 'defender' | 'attacker';
   gang: string;
@@ -26,7 +25,7 @@ interface TimerData {
 interface SelectOption {
   value: string;
   label: string;
-};
+}
 
 interface InfluenceUIProps {
   position: { x: number; y: number };
