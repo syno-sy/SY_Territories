@@ -10,11 +10,11 @@ Each zone will be controlled by influencing the area through various activites, 
 The gang that controls the area will have access to the zones resources.
 
 
+[def]: "https://youtu.be/TnzAuyMVpg8"
 
 ![SY_TerritoriesV3](./imgs/img1.png)
 ![SY_TerritoriesV3](./imgs/img2.png)
 ![SY_TerritoriesV3](./imgs/img3.png)
-
 
 
 
@@ -37,4 +37,6 @@ else
     return
 end
 ```
+
+
 
