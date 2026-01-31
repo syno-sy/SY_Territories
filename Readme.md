@@ -10,7 +10,7 @@ Each zone will be controlled by influencing the area through various activites, 
 The gang that controls the area will have access to the zones resources.
 
 
-[def]: "https://youtu.be/TnzAuyMVpg8"
+[![YouTube](https://img.youtube.com/vi/TnzAuyMVpg8/0.jpg)](https://youtu.be/TnzAuyMVpg8)
 
 ![SY_TerritoriesV3](./imgs/img1.png)
 ![SY_TerritoriesV3](./imgs/img2.png)
