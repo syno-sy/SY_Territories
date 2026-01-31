@@ -5,7 +5,7 @@ import { MantineProvider } from '@mantine/core';
 
 import './index.css';
 import '@mantine/core/styles.css';
-import '@gfazioli/mantine-rings-progress/styles.css';
+import '@syno-sy/mantine-rings-progress/styles.css';
 
 import CreateWarLayer from './components/Create/CreateWarLayer';
 import InfluenceUI from './components/InfluenceUI';

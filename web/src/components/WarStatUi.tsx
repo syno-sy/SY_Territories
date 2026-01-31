@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { RingsProgress } from '@gfazioli/mantine-rings-progress';
 import { Icon } from '@iconify/react';
+import { RingsProgress } from '@syno-sy/mantine-rings-progress';
 import {
   ActionIcon,
   Box,
