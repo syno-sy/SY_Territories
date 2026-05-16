@@ -38,7 +38,7 @@ jobs:
         run: ncu -u
 
       - name: Install updated dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Commit and Push changes
         run: |
