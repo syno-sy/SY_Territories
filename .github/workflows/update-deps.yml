@@ -2,25 +2,28 @@ name: Auto Update Dependencies
 
 on:
   schedule:
-    - cron: "0 0 * * 0" # Runs every Sunday at midnight UTC
+    - cron: "0 0 * * 0"
   workflow_dispatch:
 
 permissions:
-  contents: write # Needed for pushing changes
+  contents: write
 
 jobs:
   update-deps:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: web # Run everything inside /web
+        working-directory: web
 
     steps:
-      # 1. Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js with pnpm cache
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9 
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -28,27 +31,15 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: web/pnpm-lock.yaml
 
-      # 3. Enable pnpm via Corepack
-      - name: Enable pnpm
-        run: corepack enable
-
-      # (Optional) Pin pnpm version
-      # - name: Use specific pnpm version
-      #   run: corepack prepare pnpm@9 --activate
-
-      # 4. Install npm-check-updates
       - name: Install npm-check-updates
         run: npm install -g npm-check-updates
 
-      # 5. Update dependencies in package.json
       - name: Update package.json dependencies
         run: ncu -u
 
-      # 6. Install updated dependencies & update lockfile
       - name: Install updated dependencies
         run: pnpm install
 
-      # 7. Commit & push changes
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
