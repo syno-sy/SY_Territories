@@ -196,7 +196,7 @@ end)
 function GetGangColorCode(gang)
     local gangConfig = GangsConfig[gang]
     if gangConfig and gangConfig.color then
-        local r, g, b = colorsRGB.RGB(gangConfig.color)
+        local r, g, b = RGBHelper.RGB(gangConfig.color)
         return string_format("%d, %d, %d", r, g, b)
     end
     return "255, 255, 255"

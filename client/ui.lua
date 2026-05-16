@@ -1,5 +1,5 @@
 -- =============================
--- Local cache of globals (perf)
+-- Local cache of globals
 -- =============================
 local SendNUIMessage       = SendNUIMessage
 local SetNuiFocus          = SetNuiFocus

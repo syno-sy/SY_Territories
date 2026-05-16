@@ -1,9 +1,5 @@
 fx_version "cerulean"
-games {
-  "gta5",
-  "rdr3"
-}
-
+game "gta5"
 description "Fivem Territories System with Gangs and influence"
 author "SYNO"
 version '1.0.0'
