@@ -8,8 +8,8 @@ Config = {}
 --  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
 
 Config.Locale = "en"
-Config.Framework = "esx" -- options qb, qbox, esx, standalone
-Config.Glob = true       -- Globally visible marker on zone if war is active
+Config.Framework = "qbox" -- options qb, qbox, esx, standalone
+Config.Glob = true        -- Globally visible marker on zone if war is active
 Config.InfluenceTick = 2000
 Config.InfluenceGain = 1
 Config.InfluenceLoss = 1
@@ -112,6 +112,7 @@ Config.BlipColorIDs = {
     white4            = 85, -- white-ish
 }
 
+-- Configure the gangs and colors
 
 Config.Gangs = {
     ["police"] = {

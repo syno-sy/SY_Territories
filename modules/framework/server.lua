@@ -7,7 +7,7 @@ local QBCore, QboxCore, ESX
 if Framework == 'qb' then
     QBCore = exports['qb-core']:GetCoreObject()
 elseif Framework == 'qbox' then
-    QboxCore = exports['qbx-core'] and exports['qbx-core']:GetCoreObject()
+    QboxCore = exports['qb-core']:GetCoreObject()
 elseif Framework == 'esx' then
     ESX = exports['es_extended']:getSharedObject()
 end
