@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@mantine/core':
-        specifier: 9.3.1
-        version: 9.3.1(@mantine/hooks@9.3.1(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: 9.3.2
+        version: 9.3.2(@mantine/hooks@9.3.2(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@mantine/form':
-        specifier: ^9.3.1
-        version: 9.3.1(react@19.2.7)
+        specifier: ^9.3.2
+        version: 9.3.2(react@19.2.7)
       '@mantine/hooks':
-        specifier: 9.3.1
-        version: 9.3.1(react@19.2.7)
+        specifier: 9.3.2
+        version: 9.3.2(react@19.2.7)
       react:
         specifier: ^19.2.7
         version: 19.2.7
@@ -24,8 +24,8 @@ importers:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
       react-draggable:
-        specifier: ^4.6.0
-        version: 4.6.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: ^4.7.0
+        version: 4.7.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.7.1
@@ -325,20 +325,20 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@mantine/core@9.3.1':
-    resolution: {integrity: sha512-4rBoHpggSohayE+Os7lKdbsHTw7m/uZRKYjk9DN6cKBhQIjdiULdcG+b4b5CMVZSqZDHPgT70uWGI7yqkn8Ufw==}
+  '@mantine/core@9.3.2':
+    resolution: {integrity: sha512-Upy/Z9Sj2eW2dGrFgUy/2kISVsxMTBYTDfP2TFdsIA3PdPSBkdqfSOPX/ug3d3F3a4bnwQSqcO6+aPEpBIh8dg==}
     peerDependencies:
-      '@mantine/hooks': 9.3.1
+      '@mantine/hooks': 9.3.2
       react: ^19.2.0
       react-dom: ^19.2.0
 
-  '@mantine/form@9.3.1':
-    resolution: {integrity: sha512-dGJPcYGkfDnAPKHcnzgf2mSlnjwymaOyROiTEJNbbjE3OVoWbPaw8HwEKav1wATdxNYR9Bw1GHtbfbGTsm1Jww==}
+  '@mantine/form@9.3.2':
+    resolution: {integrity: sha512-jWEXcx8hhddOsny+q/lFtVToNS3VBJYICrkfFMWJsN+WAZamnPItWTPLqulTYVp1T8uma9MsEZ1LX4kqWUFANA==}
     peerDependencies:
       react: ^19.2.0
 
-  '@mantine/hooks@9.3.1':
-    resolution: {integrity: sha512-zAOlxV59j5CDgAnExN+ypaR6dVW1vwMKDvKUxIlUVd/e52qxYnPyYRD+shJmyOLaZRuQmVF0R/7mJAjt2jw9cA==}
+  '@mantine/hooks@9.3.2':
+    resolution: {integrity: sha512-jOjpUe0x1A/k3XUiu2/aaSCasXRI5ZKZOucm3ypwsvm9F2u8C1xzwBvagrzlbNZwJRF5vNYIJtCaT7NunPyc0A==}
     peerDependencies:
       react: ^19.2.0
 
@@ -683,8 +683,8 @@ packages:
     peerDependencies:
       react: ^19.2.7
 
-  react-draggable@4.6.0:
-    resolution: {integrity: sha512-g4vqY53xhmPrBnZvGP+1YQV0eYnB3o0VLzoi6q2IpwnQrxIZ34tYRKpVtsWIXPg4D/pvLn+oYCW5gOK2cWIrgA==}
+  react-draggable@4.7.0:
+    resolution: {integrity: sha512-kTpANmKWVnFXiZ76Ag2ZowiFStuBYnJ606PI1TbUsOg29/400/JNIxI9+CuenhiAqFuXWJffz6F4UI3R51kUug==}
     peerDependencies:
       react: '>= 16.3.0'
       react-dom: '>= 16.3.0'
@@ -1048,10 +1048,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@mantine/core@9.3.1(@mantine/hooks@9.3.1(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@mantine/core@9.3.2(@mantine/hooks@9.3.2(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@floating-ui/react': 0.27.19(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@mantine/hooks': 9.3.1(react@19.2.7)
+      '@mantine/hooks': 9.3.2(react@19.2.7)
       clsx: 2.1.1
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -1061,14 +1061,14 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/form@9.3.1(react@19.2.7)':
+  '@mantine/form@9.3.2(react@19.2.7)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       fast-deep-equal: 3.1.3
       klona: 2.0.6
       react: 19.2.7
 
-  '@mantine/hooks@9.3.1(react@19.2.7)':
+  '@mantine/hooks@9.3.2(react@19.2.7)':
     dependencies:
       react: 19.2.7
 
@@ -1330,7 +1330,7 @@ snapshots:
       react: 19.2.7
       scheduler: 0.27.0
 
-  react-draggable@4.6.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  react-draggable@4.7.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       clsx: 2.1.1
       prop-types: 15.8.1
